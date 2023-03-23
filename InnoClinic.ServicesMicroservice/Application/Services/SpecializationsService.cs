@@ -11,9 +11,9 @@ namespace Application.Services;
 
 public class SpecializationsService : ISpecializationsService
 {
-    public ISpecializationsRepository _specializationsRepository { get; set; }
-    private IServicesRepository _servicesRepository { get; set; }
-    public IMapper _mapper;
+    private ISpecializationsRepository _specializationsRepository;
+    private IServicesRepository _servicesRepository;
+    private IMapper _mapper;
 
     public SpecializationsService(ISpecializationsRepository specializationsRepository, IServicesRepository servicesRepository, IMapper mapper)
     {

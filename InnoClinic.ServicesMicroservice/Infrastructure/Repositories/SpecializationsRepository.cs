@@ -7,7 +7,7 @@ namespace Infrastructure.Repositories;
 
 public class SpecializationsRepository : ISpecializationsRepository
 {
-    private ISqlDataAccess _sqlDataAccess;
+    private readonly ISqlDataAccess _sqlDataAccess;
     private const string CreateSpecialization = "CreateSpecialization";
     private const string GetSpecializationById = "GetSpecializationById";
     private const string GetSpecializationByName = "GetSpecializationByName";

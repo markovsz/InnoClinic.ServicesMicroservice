@@ -11,8 +11,8 @@ namespace Application.Services;
 
 public class ServicesService : IServicesService
 {
-    private IServicesRepository _servicesRepository;
-    private IMapper _mapper;
+    private readonly IServicesRepository _servicesRepository;
+    private readonly IMapper _mapper;
 
     public ServicesService(IServicesRepository servicesRepository, IMapper mapper)
     {

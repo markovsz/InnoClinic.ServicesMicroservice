@@ -11,9 +11,9 @@ namespace Api.Controllers
     [ApiController]
     public class SpecializationsController : ControllerBase
     {
-        private ISpecializationsService _specializationsService;
-        private IValidator<SpecializationIncomingDto> _specializationIncomingDtoValidator;
-
+        private readonly ISpecializationsService _specializationsService;
+        private readonly IValidator<SpecializationIncomingDto> _specializationIncomingDtoValidator;
+         
         public SpecializationsController(ISpecializationsService specializationsService, IValidator<SpecializationIncomingDto> specializationIncomingDtoValidator) 
         {
             _specializationsService = specializationsService;

@@ -5,7 +5,7 @@ namespace Infrastructure;
 
 public class EntityBuilder<TEntity> : IEntityBuilder<TEntity>, IDisposable where TEntity : BaseEntity 
 {
-    private GridReader _gridReader;
+    private readonly GridReader _gridReader;
     private IEnumerable<TEntity> _entities;
 
     public EntityBuilder(GridReader gridReader)
