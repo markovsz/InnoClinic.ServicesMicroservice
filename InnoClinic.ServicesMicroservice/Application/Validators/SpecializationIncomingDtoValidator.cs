@@ -8,7 +8,7 @@ public class SpecializationIncomingDtoValidator : AbstractValidator<Specializati
 {
 	public SpecializationIncomingDtoValidator()
 	{
-        RuleFor(e => e.Name).NotEmpty();
-        RuleFor(e => e.Status).IsEnumName(typeof(Status));
-    }
+		RuleFor(e => e.Name).NotEmpty();
+		RuleFor(e => e.Status).IsEnumName(typeof(Status));
+	}
 }
