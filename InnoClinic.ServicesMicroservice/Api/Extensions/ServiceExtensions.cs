@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions;
 using Application.Services;
 using Domain.Abstractions;
+using FluentValidation;
 using Infrastructure;
 using Infrastructure.Repositories;
 
@@ -23,6 +24,11 @@ namespace Api.Extensions
         {
             services.AddScoped<IServicesService, ServicesService>();
             services.AddScoped<ISpecializationsService, SpecializationsService>();
+        }
+
+        public static void ConfigureValidators(this IServiceCollection services)
+        {
+            services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly);
         }
     }
 }
