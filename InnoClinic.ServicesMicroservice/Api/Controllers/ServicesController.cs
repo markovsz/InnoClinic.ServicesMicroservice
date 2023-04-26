@@ -1,8 +1,10 @@
-﻿using Api.Extensions;
+﻿using Api.Enums;
+using Api.Extensions;
 using Application.Abstractions;
 using Application.DTOs.Incoming;
 using Domain.RequestParameters;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -20,6 +22,7 @@ namespace Api.Controllers
             _serviceIncomingDtoValidator = serviceIncomingDtoValidator;
         }
 
+        [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpPost]
         public async Task<IActionResult> CreateServiceAsync([FromBody] ServiceIncomingDto incomingDto)
         {
@@ -29,6 +32,7 @@ namespace Api.Controllers
             return CreatedAtRoute("GetServiceById", new { id = id }, id);
         }
 
+        [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpGet]
         public async Task<IActionResult> GetServicesAsync([FromQuery] ServiceParameters parameters)
         {
@@ -36,6 +40,7 @@ namespace Api.Controllers
             return Ok(services);
         }
 
+        [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpGet("service/{id}", Name = "GetServiceById")]
         public async Task<IActionResult> GetServiceByIdAsync(Guid id)
         {
@@ -43,6 +48,7 @@ namespace Api.Controllers
             return Ok(service);
         }
 
+        [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateServiceAsync(Guid id, [FromBody] ServiceIncomingDto incomingDto)
         {
@@ -52,6 +58,7 @@ namespace Api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpPut("{id}/status")]
         public async Task<IActionResult> ChangeServiceStatusAsync(Guid id, [FromBody] string status)
         {
