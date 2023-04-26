@@ -1,8 +1,7 @@
 ﻿using Api.Enums;
-﻿using Api.Extensions;
+using Api.Extensions;
 using Application.Abstractions;
 using Application.DTOs.Incoming;
-using Application.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +31,14 @@ namespace Api.Controllers
             return CreatedAtRoute("GetSpecialization", new { id = id }, id);
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
+        [HttpPost("ids")]
+        public async Task<IActionResult> GetSpecializationsByIdsAsync([FromBody] IEnumerable<Guid> ids)
+        {
+            var entities = await _specializationsService.GetByIdsAsync(ids);
+            return Ok(entities);
+        }
+
         [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpGet("specialization/{id}", Name = "GetSpecialization")]
         public async Task<IActionResult> GetSpecializationByIdAsync(Guid id)
@@ -40,6 +47,15 @@ namespace Api.Controllers
             return Ok(entity);
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
+        [HttpGet("specialization/{id}/min")]
+        public async Task<IActionResult> GetMinSpecializationByIdAsync(Guid id)
+        {
+            var entity = await _specializationsService.GetMinByIdAsync(id);
+            return Ok(entity);
+        }
+
+        [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
         [HttpGet]
         public async Task<IActionResult> GetSpecializationsAsync()
         {
