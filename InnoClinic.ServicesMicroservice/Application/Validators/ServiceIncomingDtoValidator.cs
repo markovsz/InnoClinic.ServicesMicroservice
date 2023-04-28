@@ -1,6 +1,6 @@
-﻿using Application.DTOs.Incoming;
-using Domain.Enums;
+﻿using Domain.Enums;
 using FluentValidation;
+using InnoClinic.SharedModels.DTOs.Services.Incoming;
 
 namespace Application.Validators;
 

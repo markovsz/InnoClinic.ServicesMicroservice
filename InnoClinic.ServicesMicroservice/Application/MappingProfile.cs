@@ -1,7 +1,7 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Entities;
+using InnoClinic.SharedModels.DTOs.Services.Incoming;
+using InnoClinic.SharedModels.DTOs.Services.Outgoing;
 
 namespace Application;
 
