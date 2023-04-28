@@ -53,6 +53,18 @@ public class SpecializationsService : ISpecializationsService
         return mappedEntity;
     }
 
+    public async Task<IEnumerable<SpecializationMinOutgoingDto>> GetByIdsAsync(IEnumerable<Guid> ids)
+    {
+        var entities = new List<SpecializationMinOutgoingDto>();
+        foreach (var id in ids)
+        {
+            var entity = await _specializationsRepository.GetByIdAsync(id);
+            var mappedEntity = _mapper.Map<SpecializationMinOutgoingDto>(entity);
+            entities.Add(mappedEntity);
+        }
+        return entities;
+    }
+
     public async Task<SpecializationOutgoingDto> GetByIdAsync(Guid id)
     {
         var entity = await _specializationsRepository.GetByIdAsync(id);
@@ -60,6 +72,13 @@ public class SpecializationsService : ISpecializationsService
         var services = await _servicesRepository.GetAsync(new ServiceParameters { CategoryName = null, SpecializationName = entity.Name });
         var mappedServices = _mapper.Map<IEnumerable<ServiceMinOutgoingDto>>(services);
         mappedEntity.Services = mappedServices;
+        return mappedEntity;
+    }
+
+    public async Task<SpecializationMinOutgoingDto> GetMinByIdAsync(Guid id)
+    {
+        var entity = await _specializationsRepository.GetByIdAsync(id);
+        var mappedEntity = _mapper.Map<SpecializationMinOutgoingDto>(entity);
         return mappedEntity;
     }
 

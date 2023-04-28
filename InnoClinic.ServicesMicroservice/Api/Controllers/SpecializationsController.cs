@@ -1,8 +1,9 @@
-﻿using Api.Extensions;
+﻿using Api.Enums;
+using Api.Extensions;
 using Application.Abstractions;
 using Application.DTOs.Incoming;
-using Application.Validators;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -20,6 +21,7 @@ namespace Api.Controllers
             _specializationIncomingDtoValidator = specializationIncomingDtoValidator;
         }
 
+        [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpPost]
         public async Task<IActionResult> CreateSpecializationAsync([FromBody] SpecializationIncomingDto incomingDto)
         {
@@ -29,6 +31,15 @@ namespace Api.Controllers
             return CreatedAtRoute("GetSpecialization", new { id = id }, id);
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
+        [HttpPost("ids")]
+        public async Task<IActionResult> GetSpecializationsByIdsAsync([FromBody] IEnumerable<Guid> ids)
+        {
+            var entities = await _specializationsService.GetByIdsAsync(ids);
+            return Ok(entities);
+        }
+
+        [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpGet("specialization/{id}", Name = "GetSpecialization")]
         public async Task<IActionResult> GetSpecializationByIdAsync(Guid id)
         {
@@ -36,6 +47,15 @@ namespace Api.Controllers
             return Ok(entity);
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
+        [HttpGet("specialization/{id}/min")]
+        public async Task<IActionResult> GetMinSpecializationByIdAsync(Guid id)
+        {
+            var entity = await _specializationsService.GetMinByIdAsync(id);
+            return Ok(entity);
+        }
+
+        [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
         [HttpGet]
         public async Task<IActionResult> GetSpecializationsAsync()
         {
@@ -43,6 +63,7 @@ namespace Api.Controllers
             return Ok(entities);
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSpecializationAsync(Guid id, [FromBody] SpecializationIncomingDto incomingDto)
         {
@@ -52,6 +73,7 @@ namespace Api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
         [HttpPut("{id}/status")]
         public async Task<IActionResult> ChangeSpecializationStatusAsync(Guid id, [FromBody] string status)
         {
