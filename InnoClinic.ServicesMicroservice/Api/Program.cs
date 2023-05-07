@@ -11,7 +11,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.ConfigureServices();
 builder.Services.ConfigureValidators();
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+builder.Services.ConfigureSwagger();
 
 var app = builder.Build();
 
