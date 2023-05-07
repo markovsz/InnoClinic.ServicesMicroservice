@@ -4,6 +4,8 @@ using Domain.Abstractions;
 using FluentValidation;
 using Infrastructure;
 using Infrastructure.Repositories;
+using MassTransit;
+using Microsoft.OpenApi.Models;
 
 namespace Api.Extensions
 {
@@ -29,6 +31,17 @@ namespace Api.Extensions
         public static void ConfigureValidators(this IServiceCollection services)
         {
             services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly);
+        }
+
+        public static void ConfigureMassTransit(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddMassTransit(e =>
+            {
+                e.UsingRabbitMq((_, cfg) => { 
+                    cfg.Host(new Uri(configuration.GetSection("RabbitMq:ConnectionString").Value ??
+                                 throw new NotImplementedException()));
+                });
+            });
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)
