@@ -12,7 +12,7 @@ builder.Services.ConfigureServices();
 builder.Services.ConfigureValidators();
 builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+builder.Services.ConfigureSwagger();
 
 var app = builder.Build();
 
