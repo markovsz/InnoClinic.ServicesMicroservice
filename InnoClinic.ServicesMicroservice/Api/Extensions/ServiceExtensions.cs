@@ -4,6 +4,9 @@ using Domain.Abstractions;
 using FluentValidation;
 using Infrastructure;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MassTransit;
 using Microsoft.OpenApi.Models;
 
@@ -33,14 +36,31 @@ namespace Api.Extensions
             services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly);
         }
 
-        public static void ConfigureMassTransit(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMassTransit(e =>
+            var identityServerConfig = configuration
+                        .GetSection("IdentityServer");
+
+            var scopes = identityServerConfig
+                        .GetSection("Scopes");
+
+            services.AddAuthentication(config =>
+            config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
             {
-                e.UsingRabbitMq((_, cfg) => { 
-                    cfg.Host(new Uri(configuration.GetSection("RabbitMq:ConnectionString").Value ??
-                                 throw new NotImplementedException()));
-                });
+                config.Authority = identityServerConfig
+                    .GetSection("Address").Value;
+                config.Audience = identityServerConfig
+                    .GetSection("Audience").Value;
+                config.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = identityServerConfig
+                        .GetSection("Address").Value,
+                    ValidateIssuer = true,
+                    ValidAudience = scopes.GetSection("Basic").Value,
+
+                    ValidateAudience = true
+                };
             });
         }
 
@@ -71,6 +91,17 @@ namespace Api.Extensions
                         },
                         new string[]{}
                     }
+                });
+            });
+        }
+
+        public static void ConfigureMassTransit(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddMassTransit(e =>
+            {
+                e.UsingRabbitMq((_, cfg) => { 
+                    cfg.Host(new Uri(configuration.GetSection("RabbitMq:ConnectionString").Value ??
+                                 throw new NotImplementedException()));
                 });
             });
         }

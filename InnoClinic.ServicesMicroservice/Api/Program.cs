@@ -11,6 +11,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.ConfigureMassTransit(builder.Configuration);
 builder.Services.ConfigureServices();
 builder.Services.ConfigureValidators();
+builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.ConfigureSwagger();
 
@@ -26,6 +27,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionsHandler>();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
