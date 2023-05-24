@@ -7,6 +7,8 @@ using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MassTransit;
+using Microsoft.OpenApi.Models;
 
 namespace Api.Extensions
 {
@@ -89,6 +91,17 @@ namespace Api.Extensions
                         },
                         new string[]{}
                     }
+                });
+            });
+        }
+
+        public static void ConfigureMassTransit(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddMassTransit(e =>
+            {
+                e.UsingRabbitMq((_, cfg) => { 
+                    cfg.Host(new Uri(configuration.GetSection("RabbitMq:ConnectionString").Value ??
+                                 throw new NotImplementedException()));
                 });
             });
         }

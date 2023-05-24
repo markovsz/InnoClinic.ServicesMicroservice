@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureDb();
 builder.Services.ConfigureRepositories();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.ConfigureMassTransit(builder.Configuration);
 builder.Services.ConfigureServices();
 builder.Services.ConfigureValidators();
 builder.Services.ConfigureAuthentication(builder.Configuration);

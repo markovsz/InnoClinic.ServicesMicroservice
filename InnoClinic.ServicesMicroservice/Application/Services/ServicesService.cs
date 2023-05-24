@@ -6,17 +6,24 @@ using Domain.Exceptions;
 using Domain.RequestParameters;
 using InnoClinic.SharedModels.DTOs.Services.Incoming;
 using InnoClinic.SharedModels.DTOs.Services.Outgoing;
+using InnoClinic.SharedModels.Messages;
+using MassTransit;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Services;
 
 public class ServicesService : IServicesService
 {
     private readonly IServicesRepository _servicesRepository;
+    private readonly ISendEndpoint _sendEndpoint;
     private readonly IMapper _mapper;
 
-    public ServicesService(IServicesRepository servicesRepository, IMapper mapper)
+    public ServicesService(IServicesRepository servicesRepository, IBus bus, IMapper mapper, IConfiguration configuration)
     {
         _servicesRepository = servicesRepository;
+        var uri = configuration.GetSection("RabbitMq:Uri").Value;
+        var doctorUpdatedQueue = configuration.GetSection("RabbitMq:QueueNames:ServiceUpdated").Value;
+        _sendEndpoint = bus.GetSendEndpoint(new Uri(uri + doctorUpdatedQueue)).GetAwaiter().GetResult();
         _mapper = mapper;
     }   
 
@@ -49,6 +56,12 @@ public class ServicesService : IServicesService
         var service = _mapper.Map<Service>(incomingDto);
         service.Id = id;
         await _servicesRepository.UpdateAsync(service);
+
+        await _sendEndpoint.Send(new ServiceUpdatedMessage
+        {
+            Id = service.Id,
+            Name = service.Name
+        });
     }
 
     public async Task ChangeStatusAsync(Guid id, string status)
