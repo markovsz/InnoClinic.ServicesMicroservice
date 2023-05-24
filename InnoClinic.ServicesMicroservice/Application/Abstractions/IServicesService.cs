@@ -1,6 +1,6 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
-using Domain.RequestParameters;
+﻿using Domain.RequestParameters;
+using InnoClinic.SharedModels.DTOs.Services.Incoming;
+using InnoClinic.SharedModels.DTOs.Services.Outgoing;
 
 namespace Application.Abstractions;
 

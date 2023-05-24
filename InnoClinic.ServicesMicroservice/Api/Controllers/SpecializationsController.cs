@@ -1,8 +1,8 @@
 ﻿using Api.Enums;
 using Api.Extensions;
 using Application.Abstractions;
-using Application.DTOs.Incoming;
 using FluentValidation;
+using InnoClinic.SharedModels.DTOs.Services.Incoming;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
