@@ -39,7 +39,7 @@ public class ServicesRepository : IServicesRepository
         var parameters = new DynamicParameters();
         parameters.Add("id", id, DbType.Guid, ParameterDirection.Input);
         parameters.Add("name", service.Name, DbType.String, ParameterDirection.Input);
-        parameters.Add("price", service.Price, DbType.String, ParameterDirection.Input);
+        parameters.Add("price", service.Price, DbType.Currency, ParameterDirection.Input);
         parameters.Add("categoryId", service.CategoryId, DbType.Guid, ParameterDirection.Input);
         parameters.Add("specializationId", service.SpecializationId, DbType.Guid, ParameterDirection.Input);
         parameters.Add("status", service.Status, DbType.String, ParameterDirection.Input);
