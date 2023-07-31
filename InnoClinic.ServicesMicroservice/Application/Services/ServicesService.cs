@@ -62,6 +62,8 @@ public class ServicesService : IServicesService
     public async Task<ServiceOutgoingDto> GetByIdAsync(Guid id)
     {
         var service = await _servicesRepository.GetByIdAsync(id);
+        if (service is null)
+            throw new EntityNotFoundException();
         var mappedService = _mapper.Map<ServiceOutgoingDto>(service);
         return mappedService;
     }

@@ -67,6 +67,8 @@ public class SpecializationsService : ISpecializationsService
     public async Task<SpecializationOutgoingDto> GetByIdAsync(Guid id)
     {
         var entity = await _specializationsRepository.GetByIdAsync(id);
+        if (entity is null)
+            throw new EntityNotFoundException();
         var mappedEntity = _mapper.Map<SpecializationOutgoingDto>(entity);
         var services = await _servicesRepository.GetAsync(new ServiceParameters { CategoryName = null, SpecializationName = entity.Name });
         var mappedServices = _mapper.Map<IEnumerable<ServiceMinOutgoingDto>>(services);
@@ -77,6 +79,8 @@ public class SpecializationsService : ISpecializationsService
     public async Task<SpecializationMinOutgoingDto> GetMinByIdAsync(Guid id)
     {
         var entity = await _specializationsRepository.GetByIdAsync(id);
+        if (entity is null)
+            throw new EntityNotFoundException();
         var mappedEntity = _mapper.Map<SpecializationMinOutgoingDto>(entity);
         return mappedEntity;
     }
@@ -84,6 +88,8 @@ public class SpecializationsService : ISpecializationsService
     public async Task<SpecializationOutgoingDto> GetByNameAsync(string name)
     {
         var entity = await _specializationsRepository.GetByNameAsync(name);
+        if (entity is null)
+            throw new EntityNotFoundException();
         var mappedEntity = _mapper.Map<SpecializationOutgoingDto>(entity);
         return mappedEntity;
     }
@@ -91,7 +97,8 @@ public class SpecializationsService : ISpecializationsService
     public async Task UpdateAsync(Guid id, UpdateSpecializationIncomingDto incomingDto)
     {
         var mappedEntity = _mapper.Map<Specialization>(incomingDto);
-
+        if (mappedEntity is null)
+            throw new EntityNotFoundException();
         mappedEntity.Id = id;
         await _specializationsRepository.UpdateAsync(mappedEntity);
     }
