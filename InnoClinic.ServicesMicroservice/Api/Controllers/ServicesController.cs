@@ -40,7 +40,15 @@ namespace Api.Controllers
             return Ok(services);
         }
 
-        [Authorize(Roles = nameof(UserRole.Receptionist))]
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
+        [HttpPost("ids")]
+        public async Task<IActionResult> GetServicesByIdsAsync([FromBody] IEnumerable<Guid> ids)
+        {
+            var entities = await _servicesService.GetByIdsAsync(ids);
+            return Ok(entities);
+        }
+
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
         [HttpGet("service/{id}", Name = "GetServiceById")]
         public async Task<IActionResult> GetServiceByIdAsync(Guid id)
         {

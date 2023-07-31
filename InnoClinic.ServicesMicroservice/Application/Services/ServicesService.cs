@@ -41,6 +41,18 @@ public class ServicesService : IServicesService
         return mappedServices;
     }
 
+    public async Task<IEnumerable<ServiceMinOutgoingDto>> GetByIdsAsync(IEnumerable<Guid> ids)
+    {
+        var entities = new List<ServiceMinOutgoingDto>();
+        foreach (var id in ids)
+        {
+            var entity = await _servicesRepository.GetByIdAsync(id);
+            var mappedEntity = _mapper.Map<ServiceMinOutgoingDto>(entity);
+            entities.Add(mappedEntity);
+        }
+        return entities;
+    }
+
     public async Task<ServiceOutgoingDto> GetByIdAsync(Guid id)
     {
         var service = await _servicesRepository.GetByIdAsync(id);
