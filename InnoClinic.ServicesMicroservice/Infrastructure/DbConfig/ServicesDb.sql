@@ -59,6 +59,22 @@ go
 
 
 go
+create procedure GetMinServiceById
+	@id uniqueidentifier
+as
+begin
+	select * from Services
+	where Id = @id
+
+	select sc.Id, sc.Name, sc.TimeSlotSize from ServiceCategories as sc
+	join dbo.Services as s on s.CategoryId = sc.Id
+	where s.Id = @id
+end
+go
+
+
+
+go
 create procedure GetServiceById
 	@id uniqueidentifier
 as

@@ -9,6 +9,7 @@ public interface IServicesService
     Task<Guid> CreateAsync(ServiceIncomingDto incomingDto);
     Task<IEnumerable<ServiceMinOutgoingDto>> GetAsync(ServiceParameters parameters);
     Task<ServiceOutgoingDto> GetByIdAsync(Guid id);
+    Task<ServiceMinOutgoingDto> GetMinByIdAsync(Guid id);
     Task UpdateAsync(Guid id, ServiceIncomingDto incomingDto);
     Task ChangeStatusAsync(Guid id, string status);
 }

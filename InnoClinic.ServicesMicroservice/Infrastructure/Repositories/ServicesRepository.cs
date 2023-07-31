@@ -14,6 +14,7 @@ public class ServicesRepository : IServicesRepository
     private const string ChangeServiceStatus = "ChangeServiceStatus";
     private const string GetServices = "GetServices";
     private const string GetServiceById = "GetServiceById";
+    private const string GetMinServiceById = "GetMinServiceById";
     private const string GetServiceByName = "GetServiceByName";
     private const string ServiceExists = "ServiceExists";
     private const string UpdateService = "UpdateService";
@@ -67,6 +68,18 @@ public class ServicesRepository : IServicesRepository
         await entityBuilder.RetrieveBaseEntityAsync();
         await entityBuilder.JoinRelatedEntityAsync<ServiceCategory>(e => e.CategoryId, (s, sc) => new Service(s) { Category = sc });
         await entityBuilder.JoinRelatedEntityAsync<Specialization>(e => e.SpecializationId, (s, sp) => new Service(s) { Specialization = sp });
+        var service = entityBuilder.GetEntities()
+            .FirstOrDefault();
+        return service;
+    }
+
+    public async Task<Service> GetMinByIdAsync(Guid id)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("id", id, DbType.Guid, ParameterDirection.Input);
+        using var entityBuilder = await _sqlDataAccess.QueryComplexAsync<Service>(GetMinServiceById, parameters);
+        await entityBuilder.RetrieveBaseEntityAsync();
+        await entityBuilder.JoinRelatedEntityAsync<ServiceCategory>(e => e.CategoryId, (s, sc) => new Service(s) { Category = sc });
         var service = entityBuilder.GetEntities()
             .FirstOrDefault();
         return service;

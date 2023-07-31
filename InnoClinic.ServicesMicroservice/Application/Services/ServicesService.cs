@@ -48,6 +48,15 @@ public class ServicesService : IServicesService
         return mappedService;
     }
 
+    public async Task<ServiceMinOutgoingDto> GetMinByIdAsync(Guid id)
+    {
+        var service = await _servicesRepository.GetMinByIdAsync(id);
+        if (service is null)
+            throw new EntityNotFoundException();
+        var mappedService = _mapper.Map<ServiceMinOutgoingDto>(service);
+        return mappedService;
+    }
+
     public async Task UpdateAsync(Guid id, ServiceIncomingDto incomingDto)
     {
         var exists = await _servicesRepository.Exists(id);

@@ -48,6 +48,14 @@ namespace Api.Controllers
             return Ok(service);
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
+        [HttpGet("service/{id}/min")]
+        public async Task<IActionResult> GetMinServiceByIdAsync(Guid id)
+        {
+            var service = await _servicesService.GetMinByIdAsync(id);
+            return Ok(service);
+        }
+
         [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateServiceAsync(Guid id, [FromBody] ServiceIncomingDto incomingDto)
