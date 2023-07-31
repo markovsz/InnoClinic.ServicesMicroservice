@@ -9,7 +9,10 @@ public class MappingProfile : Profile
 {
     public MappingProfile() 
     {
-        CreateMap<ServiceIncomingDto, Service>();
+        CreateMap<ServiceIncomingDto, Service>()
+            .ForMember(e => e.Category, opt => opt.Ignore());
+        CreateMap<AddServiceIncomingDto, Service>()
+            .ForMember(e => e.Category, opt => opt.Ignore());
         CreateMap<Service, ServiceOutgoingDto>();
         CreateMap<Service, ServiceMinOutgoingDto>();
         CreateMap<SpecializationIncomingDto, Specialization>();

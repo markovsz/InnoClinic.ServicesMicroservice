@@ -27,9 +27,13 @@ public class ServicesService : IServicesService
         _mapper = mapper;
     }   
 
-    public async Task<Guid> CreateAsync(ServiceIncomingDto incomingDto)
+    public async Task<Guid> CreateAsync(AddServiceIncomingDto incomingDto)
     {
         var service = _mapper.Map<Service>(incomingDto);
+        var category = await _serviceCategoriesRepository.GetByNameAsync(incomingDto.Category);
+        if (category is null)
+            throw new EntityNotFoundException();
+        service.CategoryId = category.Id;
         var id = await _servicesRepository.CreateAsync(service);
         return id;
     }

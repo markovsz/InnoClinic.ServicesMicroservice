@@ -6,7 +6,7 @@ namespace Application.Abstractions;
 
 public interface IServicesService
 {
-    Task<Guid> CreateAsync(ServiceIncomingDto incomingDto);
+    Task<Guid> CreateAsync(AddServiceIncomingDto incomingDto);
     Task<IEnumerable<ServiceMinOutgoingDto>> GetAsync(ServiceParameters parameters);
     Task<IEnumerable<ServiceMinOutgoingDto>> GetByIdsAsync(IEnumerable<Guid> ids);
     Task<ServiceOutgoingDto> GetByIdAsync(Guid id);

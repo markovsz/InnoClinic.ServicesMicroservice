@@ -15,18 +15,22 @@ namespace Api.Controllers
     {
         private readonly IServicesService _servicesService;
         private readonly IValidator<ServiceIncomingDto> _serviceIncomingDtoValidator;
+        private readonly IValidator<AddServiceIncomingDto> _addServiceIncomingDtoValidator;
 
-        public ServicesController(IServicesService servicesService, IValidator<ServiceIncomingDto> serviceIncomingDtoValidator)
+        public ServicesController(IServicesService servicesService, 
+            IValidator<ServiceIncomingDto> serviceIncomingDtoValidator,
+            IValidator<AddServiceIncomingDto> addServiceIncomingDtoValidator)
         {
             _servicesService = servicesService;
             _serviceIncomingDtoValidator = serviceIncomingDtoValidator;
+            _addServiceIncomingDtoValidator = addServiceIncomingDtoValidator;
         }
 
         [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpPost]
-        public async Task<IActionResult> CreateServiceAsync([FromBody] ServiceIncomingDto incomingDto)
+        public async Task<IActionResult> CreateServiceAsync([FromBody] AddServiceIncomingDto incomingDto)
         {
-            var result = await _serviceIncomingDtoValidator.ValidateAsync(incomingDto);
+            var result = await _addServiceIncomingDtoValidator.ValidateAsync(incomingDto);
             result.HandleValidationResult();
             var id = await _servicesService.CreateAsync(incomingDto);
             return CreatedAtRoute("GetServiceById", new { id = id }, id);
