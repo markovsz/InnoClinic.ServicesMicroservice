@@ -15,12 +15,14 @@ namespace Application.Services;
 public class ServicesService : IServicesService
 {
     private readonly IServicesRepository _servicesRepository;
+    private readonly IServiceCategoriesRepository _serviceCategoriesRepository;
     private readonly ISendEndpoint _sendEndpoint;
     private readonly IMapper _mapper;
 
-    public ServicesService(IServicesRepository servicesRepository, IBus bus, IMapper mapper, IConfiguration configuration)
+    public ServicesService(IServicesRepository servicesRepository, IServiceCategoriesRepository serviceCategoriesRepository, IBus bus, IMapper mapper, IConfiguration configuration)
     {
         _servicesRepository = servicesRepository;
+        _serviceCategoriesRepository = serviceCategoriesRepository;
         var uri = configuration.GetSection("RabbitMq:Uri").Value;
         var doctorUpdatedQueue = configuration.GetSection("RabbitMq:QueueNames:ServiceUpdated").Value;
         _sendEndpoint = bus.GetSendEndpoint(new Uri(uri + doctorUpdatedQueue)).GetAwaiter().GetResult();
@@ -80,6 +82,10 @@ public class ServicesService : IServicesService
             throw new EntityNotFoundException();
         var service = _mapper.Map<Service>(incomingDto);
         service.Id = id;
+        var category = await _serviceCategoriesRepository.GetByNameAsync(incomingDto.Category);
+        service.CategoryId = category.Id;
+        service.Price = incomingDto.Price;
+        service.Status = incomingDto.Status;
         await _servicesRepository.UpdateAsync(service);
 
         await _sendEndpoint.Send(new ServiceUpdatedMessage
