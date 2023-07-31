@@ -22,6 +22,7 @@ namespace Api.Extensions
         public static void ConfigureRepositories(this IServiceCollection services)
         {
             services.AddScoped<IServicesRepository, ServicesRepository>();
+            services.AddScoped<IServiceCategoriesRepository, ServiceCategoriesRepository>();
             services.AddScoped<ISpecializationsRepository, SpecializationsRepository>();
         }
 
@@ -29,6 +30,7 @@ namespace Api.Extensions
         {
             services.AddScoped<IServicesService, ServicesService>();
             services.AddScoped<ISpecializationsService, SpecializationsService>();
+            services.AddScoped<ICategoriesService, CategoriesService>();
         }
 
         public static void ConfigureValidators(this IServiceCollection services)

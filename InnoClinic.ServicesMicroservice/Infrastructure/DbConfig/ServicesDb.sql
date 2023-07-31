@@ -228,6 +228,18 @@ go
 
 
 go
+create procedure GetServiceCategoryByName
+	@name nvarchar(40)
+as
+begin
+	select * from ServiceCategories
+	where Name = @name
+end
+go
+
+
+
+go
 create procedure GetServiceCategories
 as
 begin

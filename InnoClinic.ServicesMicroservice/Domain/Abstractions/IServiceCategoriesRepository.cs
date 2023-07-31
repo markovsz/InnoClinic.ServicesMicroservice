@@ -4,6 +4,5 @@ namespace Domain.Abstractions;
 
 public interface IServiceCategoriesRepository
 {
-    Task<ServiceCategory> GetByIdAsync(Guid id);
-    Task<IEnumerable<ServiceCategory>> GetAsync();
+    Task<ServiceCategory> GetByNameAsync(string name);
 }
