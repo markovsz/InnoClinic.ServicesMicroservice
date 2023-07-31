@@ -14,11 +14,16 @@ namespace Api.Controllers
     {
         private readonly ISpecializationsService _specializationsService;
         private readonly IValidator<SpecializationIncomingDto> _specializationIncomingDtoValidator;
+        private readonly IValidator<UpdateSpecializationIncomingDto> _updateSpecializationIncomingDtoValidator;
          
-        public SpecializationsController(ISpecializationsService specializationsService, IValidator<SpecializationIncomingDto> specializationIncomingDtoValidator) 
+
+        public SpecializationsController(ISpecializationsService specializationsService, 
+            IValidator<SpecializationIncomingDto> specializationIncomingDtoValidator,
+            IValidator<UpdateSpecializationIncomingDto> updateSpecializationIncomingDtoValidator) 
         {
             _specializationsService = specializationsService;
             _specializationIncomingDtoValidator = specializationIncomingDtoValidator;
+            _updateSpecializationIncomingDtoValidator = updateSpecializationIncomingDtoValidator;
         }
 
         [Authorize(Roles = nameof(UserRole.Receptionist))]
@@ -65,9 +70,9 @@ namespace Api.Controllers
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSpecializationAsync(Guid id, [FromBody] SpecializationIncomingDto incomingDto)
+        public async Task<IActionResult> UpdateSpecializationAsync(Guid id, [FromBody] UpdateSpecializationIncomingDto incomingDto)
         {
-            var result = await _specializationIncomingDtoValidator.ValidateAsync(incomingDto);
+            var result = await _updateSpecializationIncomingDtoValidator.ValidateAsync(incomingDto);
             result.HandleValidationResult();
             await _specializationsService.UpdateAsync(id, incomingDto);
             return NoContent();

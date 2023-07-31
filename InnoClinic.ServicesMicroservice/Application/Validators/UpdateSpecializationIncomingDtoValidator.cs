@@ -4,12 +4,11 @@ using InnoClinic.SharedModels.DTOs.Services.Incoming;
 
 namespace Application.Validators;
 
-public class SpecializationIncomingDtoValidator : AbstractValidator<SpecializationIncomingDto>
+public class UpdateSpecializationIncomingDtoValidator : AbstractValidator<UpdateSpecializationIncomingDto>
 {
-	public SpecializationIncomingDtoValidator()
+	public UpdateSpecializationIncomingDtoValidator()
 	{
 		RuleFor(e => e.Name).NotEmpty();
 		RuleFor(e => e.Status).IsEnumName(typeof(Status));
-		RuleForEach(e => e.Services).SetValidator(new ServiceIncomingDtoValidator());
 	}
 }

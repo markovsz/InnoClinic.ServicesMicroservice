@@ -35,12 +35,11 @@ public class SpecializationsService : ISpecializationsService
         var mappedEntity = _mapper.Map<Specialization>(incomingDto);
         var specializationId = await _specializationsRepository.CreateAsync(mappedEntity);
 
-        foreach (var serviceId in incomingDto.ServiceIds)
+        var mappedServices = _mapper.Map<IEnumerable<Service>>(incomingDto.Services);
+
+        foreach (var service in mappedServices)
         {
-            var exists = await _servicesRepository.Exists(serviceId);
-            if (!exists)
-                throw new EntityNotFoundException($"there is no service with id = '{serviceId}'");
-            await _servicesRepository.LinkWithSpecializationByIdAsync(serviceId, specializationId);
+            await _servicesRepository.CreateAsync(service);
         }
 
         return specializationId;
@@ -89,20 +88,11 @@ public class SpecializationsService : ISpecializationsService
         return mappedEntity;
     }
 
-    public async Task UpdateAsync(Guid id, SpecializationIncomingDto incomingDto)
+    public async Task UpdateAsync(Guid id, UpdateSpecializationIncomingDto incomingDto)
     {
         var mappedEntity = _mapper.Map<Specialization>(incomingDto);
 
         mappedEntity.Id = id;
         await _specializationsRepository.UpdateAsync(mappedEntity);
-
-        foreach (var serviceId in incomingDto.ServiceIds)
-        {
-            var exists = await _servicesRepository.Exists(serviceId);
-            if (!exists)
-                throw new EntityNotFoundException($"there is no service with id = '{serviceId}'");
-            await _servicesRepository.LinkWithSpecializationByIdAsync(serviceId, id);
-        }
-
     }
 }

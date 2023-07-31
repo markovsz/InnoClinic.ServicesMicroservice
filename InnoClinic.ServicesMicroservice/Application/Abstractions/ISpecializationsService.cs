@@ -10,6 +10,6 @@ public interface ISpecializationsService
     Task<IEnumerable<SpecializationMinOutgoingDto>> GetByIdsAsync(IEnumerable<Guid> ids);
     Task<SpecializationOutgoingDto> GetByIdAsync(Guid id);
     Task<SpecializationMinOutgoingDto> GetMinByIdAsync(Guid id);
-    Task UpdateAsync(Guid id, SpecializationIncomingDto incomingDto);
+    Task UpdateAsync(Guid id, UpdateSpecializationIncomingDto incomingDto);
     Task ChangeStatusAsync(Guid id, string status);
 }

@@ -16,6 +16,7 @@ public class MappingProfile : Profile
         CreateMap<Service, ServiceOutgoingDto>();
         CreateMap<Service, ServiceMinOutgoingDto>();
         CreateMap<SpecializationIncomingDto, Specialization>();
+        CreateMap<UpdateSpecializationIncomingDto, Specialization>();
         CreateMap<Specialization, SpecializationOutgoingDto>();
         CreateMap<Specialization, SpecializationMinOutgoingDto>();
         CreateMap<ServiceCategory, ServiceCategoryOutgoingDto>();
