@@ -36,7 +36,7 @@ namespace Api.Controllers
             return CreatedAtRoute("GetServiceById", new { id = id }, id);
         }
 
-        [Authorize(Roles = nameof(UserRole.Receptionist))]
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
         [HttpGet]
         public async Task<IActionResult> GetServicesAsync([FromQuery] ServiceParameters parameters)
         {

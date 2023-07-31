@@ -15,7 +15,7 @@ namespace Api.Controllers
         private readonly ISpecializationsService _specializationsService;
         private readonly IValidator<SpecializationIncomingDto> _specializationIncomingDtoValidator;
         private readonly IValidator<UpdateSpecializationIncomingDto> _updateSpecializationIncomingDtoValidator;
-         
+
 
         public SpecializationsController(ISpecializationsService specializationsService, 
             IValidator<SpecializationIncomingDto> specializationIncomingDtoValidator,
@@ -44,7 +44,7 @@ namespace Api.Controllers
             return Ok(entities);
         }
 
-        [Authorize(Roles = nameof(UserRole.Receptionist))]
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
         [HttpGet("specialization/{id}", Name = "GetSpecialization")]
         public async Task<IActionResult> GetSpecializationByIdAsync(Guid id)
         {
@@ -60,7 +60,7 @@ namespace Api.Controllers
             return Ok(entity);
         }
 
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
         [HttpGet]
         public async Task<IActionResult> GetSpecializationsAsync()
         {
